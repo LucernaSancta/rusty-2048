@@ -1,23 +1,15 @@
-// TODO:
-// implement directions in sum_tiles()
-use std::cmp::Ordering;
-
-enum Direction {
-    Up,
-    Down,
-    Left,
-    Right
-}
+mod game_logic;
+use game_logic::Direction;
 
 fn main() {
-    let mut grid: [[u16; 4]; 4] = create_grid();
+    let mut grid: [[u16; 4]; 4] = game_logic::create_grid();
 
 
 
     grid[0][2] = 2;
     grid[2][2] = 4;
 
-    gravity(&mut grid, Direction::Down);
+    game_logic::gravity(&mut grid, Direction::Down);
 
     for row in grid {
         println!("{:?}", row);
@@ -26,14 +18,14 @@ fn main() {
     return;
 
     // In 2048 the initial gfrid has three random values
-    rand_new_tile(&mut grid);
-    rand_new_tile(&mut grid);
-    rand_new_tile(&mut grid);
+    game_logic::rand_new_tile(&mut grid);
+    game_logic::rand_new_tile(&mut grid);
+    game_logic::rand_new_tile(&mut grid);
 
     // Game loop
     loop {
-        rand_new_tile(&mut grid);
-        println!("{}", get_free(&grid));
+        game_logic::rand_new_tile(&mut grid);
+        println!("{}", game_logic::get_free(&grid));
         for row in grid {
             println!("{:?}", row);
         }
@@ -41,147 +33,6 @@ fn main() {
         let mut buf = String::new();
         let _ = std::io::stdin().read_line(&mut buf);
 
-        sum_tiles(&mut grid, Direction::Down);
-    }
-}
-
-fn create_grid() -> [[u16; 4]; 4] {
-    // Create the 4x4 grid of u16 unsigned integers
-
-    let grid: [[u16; 4]; 4] = [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ];
-    return grid;
-}
-
-fn rand_new() -> u16 {
-    // Get a random number (either 90% 2 or  10% 4)
-
-    let n: u8 = rand::random_range(0..10);
-    return match n {
-        0 => 4,
-        _ => 2
-    }
-}
-
-fn get_free(grid: &[[u16; 4]; 4]) -> u8 {
-    // Get the number of 0s in the grid
-
-    let mut n: u8 = 0;
-    for row in grid {
-        for element in row {
-            if *element == 0 {
-                n += 1;
-            }
-        }
-    }
-    return n;
-}
-
-fn rand_new_tile(grid: &mut [[u16; 4]; 4]) {
-    // Place a new value in a random empty tile,
-    // does nothing if no tile is empty
-
-    let free: u8 = get_free(&grid);
-    if free == 0 {
-        return;
-    }
-
-    let mut reverse_counter: u8 = rand::random_range(0..free);
-    // Remove 1 from the counter for every 0 in the grid,
-    // place a new value if the counter is set to 0 and
-    // the current tile is 0
-    for row in grid {
-        for element in row {
-            // Is the tile 0? and is it the end of the counter
-            if *element == 0 {
-                if reverse_counter == 0 {
-                    *element = rand_new();
-                    return;
-                } else {
-                    reverse_counter -= 1;
-                }
-            }
-        }
-    }
-}
-
-fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
-    // Sum equal tiles so that there s only one tile with double the value
-
-    match direction {
-        Direction::Down => {
-            // 1..4 (1,2,3) because we only need 3 additions:
-            // rows 0-1, 1-2 and 2-3
-            for row in (1..4).rev() {
-                // Here we take all 4 elements of the row, not only 3
-                for element in 0..4 {
-                    if grid[row][element] == grid[row-1][element] {
-                        // Double the element below and delete the element above
-                        grid[row][element] *= 2;
-                        grid[row-1][element] = 0;
-                    }
-                }
-            }
-        }
-        Direction::Up => todo!(),
-        Direction::Left => todo!(),
-        Direction::Right => todo!(),
-    }
-}
-
-fn sort_left(_: &u16, b: &u16) -> Ordering {
-    if *b == 0 {Ordering::Less}
-    else {Ordering::Equal}}
-
-fn sort_right(a: &u16, _: &u16) -> Ordering {
-    if *a == 0 {Ordering::Less}
-    else {Ordering::Equal}}
-
-fn gravity(grid: &mut [[u16; 4]; 4], direction: Direction) {
-    // Compresses all value of a row/comuln in one direction
-    // [2,0,4,0], Right => [0,0,2,4]
-
-    match direction {
-        Direction::Down => {
-            // Create a temporary array and place the values
-            // of a column, sort the array and put the values back
-            for y in 0..4 {
-                let mut temp_array: [u16; 4] = [0,0,0,0];
-                for x in 0..4 {
-                    temp_array[x] = grid[x][y];
-                }
-                temp_array.sort_by(sort_right);
-                for x in 0..4 {
-                    grid[x][y] = temp_array[x];
-                }
-            }
-        }
-        Direction::Up => {
-            for y in 0..4 {
-                let mut temp_array: [u16; 4] = [0,0,0,0];
-                for x in 0..4 {
-                    temp_array[x] = grid[x][y];
-                }
-                temp_array.sort_by(sort_left);
-                for x in 0..4 {
-                    grid[x][y] = temp_array[x];
-                }
-            }
-        }
-        Direction::Left => {
-            // Sort the row with the custom function
-            for row in grid {
-                row.sort_by(sort_left);
-            }
-        }
-        Direction::Right => {
-            for row in grid {
-                row.sort_by(sort_right);
-            }
-        }
+        game_logic::sum_tiles(&mut grid, Direction::Down);
     }
 }

@@ -1,5 +1,3 @@
-// TODO:
-// implement directions in sum_tiles()
 use std::cmp::Ordering;
 
 pub enum Direction {

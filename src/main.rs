@@ -1,21 +1,13 @@
 mod game_logic;
 use game_logic::Direction;
+#[cfg(test)]
+mod tests;
+
+// TODO:
+// implement directions in sum_tiles()
 
 fn main() {
     let mut grid: [[u16; 4]; 4] = game_logic::create_grid();
-
-
-
-    grid[0][2] = 2;
-    grid[2][2] = 4;
-
-    game_logic::gravity(&mut grid, Direction::Down);
-
-    for row in grid {
-        println!("{:?}", row);
-    }
-
-    return;
 
     // In 2048 the initial gfrid has three random values
     game_logic::rand_new_tile(&mut grid);

@@ -8,12 +8,16 @@ fn main() {
 
     // Game loop
     loop {
-        print!("{}", get_free(&grid));
-        println!("{:?}", grid);
+        println!("{}", get_free(&grid));
         rand_new_tile(&mut grid);
+        for row in grid {
+            println!("{:?}", row);
+        }
 
         let mut buf = String::new();
         let _ = std::io::stdin().read_line(&mut buf);
+
+        sum_tiles(&mut grid);
     }
 }
 
@@ -76,6 +80,23 @@ fn rand_new_tile(grid: &mut [[u16; 4]; 4]) {
                 } else {
                     reverse_counter -= 1;
                 }
+            }
+        }
+    }
+}
+
+fn sum_tiles(grid: &mut [[u16; 4]; 4]) {
+    // Sum equal tiles so that there s only one tile with double the value
+
+    // 1..4 (1,2,3) because we only need 3 additions:
+    // rows 0-1, 1-2 and 2-3
+    for row in (1..4).rev() {
+        // Here we take all 4 elements of the row, not only 3
+        for element in 0..4 {
+            if grid[row][element] == grid[row-1][element] {
+                // Double the element below and delete the element above
+                grid[row][element] *= 2;
+                grid[row-1][element] = 0;
             }
         }
     }

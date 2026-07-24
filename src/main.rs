@@ -1,3 +1,14 @@
+// TODO:
+// implement directions in sum_tiles()
+// write gravity() and implement directions in it
+
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right
+}
+
 fn main() {
     let mut grid: [[u16; 4]; 4] = create_grid();
 
@@ -17,7 +28,7 @@ fn main() {
         let mut buf = String::new();
         let _ = std::io::stdin().read_line(&mut buf);
 
-        sum_tiles(&mut grid);
+        sum_tiles(&mut grid, Direction::Down);
     }
 }
 
@@ -85,7 +96,7 @@ fn rand_new_tile(grid: &mut [[u16; 4]; 4]) {
     }
 }
 
-fn sum_tiles(grid: &mut [[u16; 4]; 4]) {
+fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
     // Sum equal tiles so that there s only one tile with double the value
 
     // 1..4 (1,2,3) because we only need 3 additions:
@@ -100,4 +111,8 @@ fn sum_tiles(grid: &mut [[u16; 4]; 4]) {
             }
         }
     }
+}
+
+fn gravity(grid: &mut [[u16; 4]; 4], direction: Direction) {
+    todo!();
 }

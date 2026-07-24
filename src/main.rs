@@ -3,10 +3,6 @@ use game_logic::Direction;
 #[cfg(test)]
 mod tests;
 
-// TODO:
-// implement directions in sum_tiles()
-// make unit tests for sum_tiles()
-
 fn main() {
     let mut grid: [[u16; 4]; 4] = game_logic::create_grid();
 

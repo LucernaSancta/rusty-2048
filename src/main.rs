@@ -1,6 +1,6 @@
 // TODO:
 // implement directions in sum_tiles()
-// write gravity() and implement directions in it
+use std::cmp::Ordering;
 
 enum Direction {
     Up,
@@ -12,6 +12,19 @@ enum Direction {
 fn main() {
     let mut grid: [[u16; 4]; 4] = create_grid();
 
+
+
+    grid[0][2] = 2;
+    grid[2][2] = 4;
+
+    gravity(&mut grid, Direction::Down);
+
+    for row in grid {
+        println!("{:?}", row);
+    }
+
+    return;
+
     // In 2048 the initial gfrid has three random values
     rand_new_tile(&mut grid);
     rand_new_tile(&mut grid);
@@ -19,8 +32,8 @@ fn main() {
 
     // Game loop
     loop {
-        println!("{}", get_free(&grid));
         rand_new_tile(&mut grid);
+        println!("{}", get_free(&grid));
         for row in grid {
             println!("{:?}", row);
         }
@@ -99,20 +112,76 @@ fn rand_new_tile(grid: &mut [[u16; 4]; 4]) {
 fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
     // Sum equal tiles so that there s only one tile with double the value
 
-    // 1..4 (1,2,3) because we only need 3 additions:
-    // rows 0-1, 1-2 and 2-3
-    for row in (1..4).rev() {
-        // Here we take all 4 elements of the row, not only 3
-        for element in 0..4 {
-            if grid[row][element] == grid[row-1][element] {
-                // Double the element below and delete the element above
-                grid[row][element] *= 2;
-                grid[row-1][element] = 0;
+    match direction {
+        Direction::Down => {
+            // 1..4 (1,2,3) because we only need 3 additions:
+            // rows 0-1, 1-2 and 2-3
+            for row in (1..4).rev() {
+                // Here we take all 4 elements of the row, not only 3
+                for element in 0..4 {
+                    if grid[row][element] == grid[row-1][element] {
+                        // Double the element below and delete the element above
+                        grid[row][element] *= 2;
+                        grid[row-1][element] = 0;
+                    }
+                }
             }
         }
+        Direction::Up => todo!(),
+        Direction::Left => todo!(),
+        Direction::Right => todo!(),
     }
 }
 
+fn sort_left(_: &u16, b: &u16) -> Ordering {
+    if *b == 0 {Ordering::Less}
+    else {Ordering::Equal}}
+
+fn sort_right(a: &u16, _: &u16) -> Ordering {
+    if *a == 0 {Ordering::Less}
+    else {Ordering::Equal}}
+
 fn gravity(grid: &mut [[u16; 4]; 4], direction: Direction) {
-    todo!();
+    // Compresses all value of a row/comuln in one direction
+    // [2,0,4,0], Right => [0,0,2,4]
+
+    match direction {
+        Direction::Down => {
+            // Create a temporary array and place the values
+            // of a column, sort the array and put the values back
+            for y in 0..4 {
+                let mut temp_array: [u16; 4] = [0,0,0,0];
+                for x in 0..4 {
+                    temp_array[x] = grid[x][y];
+                }
+                temp_array.sort_by(sort_right);
+                for x in 0..4 {
+                    grid[x][y] = temp_array[x];
+                }
+            }
+        }
+        Direction::Up => {
+            for y in 0..4 {
+                let mut temp_array: [u16; 4] = [0,0,0,0];
+                for x in 0..4 {
+                    temp_array[x] = grid[x][y];
+                }
+                temp_array.sort_by(sort_left);
+                for x in 0..4 {
+                    grid[x][y] = temp_array[x];
+                }
+            }
+        }
+        Direction::Left => {
+            // Sort the row with the custom function
+            for row in grid {
+                row.sort_by(sort_left);
+            }
+        }
+        Direction::Right => {
+            for row in grid {
+                row.sort_by(sort_right);
+            }
+        }
+    }
 }

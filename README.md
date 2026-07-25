@@ -6,4 +6,4 @@ The name *"rusty 2048"* is a typing error, the project should have been named *"
 
 ## TODO list
 
- - create github workflow to execute tests
+ - implement a TUI with [Ratatui](https://ratatui.rs/)

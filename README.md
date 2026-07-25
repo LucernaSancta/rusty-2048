@@ -7,5 +7,4 @@ The name *"rusty 2048"* is a typing error, the project should have been named *"
 ## TODO list
 
  - implement directions in sum_tiles()
- - make unit tests for sum_tiles()
  - create github workflow to execute tests

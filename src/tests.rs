@@ -1,8 +1,12 @@
 use crate::game_logic;
 use crate::game_logic::Direction;
 
+//
+// Test for create_grid
+//
+
 #[test]
-fn test_grid_setup() {
+fn test_create_grid() {
     let grid1 = game_logic::create_grid();
     let grid2: [[u16; 4]; 4] = [
         [0, 0, 0, 0],
@@ -13,13 +17,21 @@ fn test_grid_setup() {
     assert_eq!(grid1, grid2);
 }
 
+//
+// Test for rand_new, 100 iterations
+//
+
 #[test]
 fn test_rand_new() {
-    for _ in 0..100{
+    for _ in 0..100 {
         let n = game_logic::rand_new();
         assert!((n == 2) || (n == 4));
     }
 }
+
+//
+// Tests for get_free, 3 iterations (16,12,10)
+//
 
 #[test]
 fn test_get_free16() {
@@ -46,6 +58,10 @@ fn test_get_free10() {
     assert_eq!(n, 10);
 }
 
+//
+// Test for rand_new_tile, 8 iterations
+//
+
 #[test]
 fn test_rand_new_tile8() {
     let mut grid = game_logic::create_grid();
@@ -64,19 +80,85 @@ fn test_rand_new_tile8() {
     assert_eq!(counter, 8);
 }
 
+//
+// Tests for sum_tiles, 4 directions
+//
 
+#[test]
+fn test_sum_tiles_down() {
+    let mut grid1: [[u16; 4]; 4] = [
+        [2, 2, 8, 8],
+        [2, 2, 2, 8],
+        [16, 16, 2, 2],
+        [2, 16, 2, 2]
+    ];
+    game_logic::sum_tiles(&mut grid1, Direction::Down);
+    let grid2: [[u16; 4]; 4] = [
+        [0, 0, 8, 0],
+        [4, 4, 2, 16],
+        [16, 0, 0, 0],
+        [2, 32, 4, 4]
+    ];
+    assert_eq!(grid1, grid2);
+}
 
+#[test]
+fn test_sum_tiles_up() {
+    let mut grid1: [[u16; 4]; 4] = [
+        [2, 2, 8, 8],
+        [2, 2, 2, 8],
+        [16, 16, 2, 2],
+        [2, 16, 2, 2]
+    ];
+    game_logic::sum_tiles(&mut grid1, Direction::Up);
+    let grid2: [[u16; 4]; 4] = [
+        [4, 4, 8, 16],
+        [0, 0, 4, 0],
+        [16, 32, 0, 4],
+        [2, 0, 2, 0]
+    ];
+    assert_eq!(grid1, grid2);
+}
 
+#[test]
+fn test_sum_tiles_left() {
+    let mut grid1: [[u16; 4]; 4] = [
+        [2, 2, 8, 8],
+        [2, 2, 2, 8],
+        [16, 16, 2, 2],
+        [2, 16, 2, 2]
+    ];
+    game_logic::sum_tiles(&mut grid1, Direction::Left);
+    let grid2: [[u16; 4]; 4] = [
+        [4, 0, 16, 0],
+        [4, 0, 2, 8],
+        [32, 0, 4, 0],
+        [2, 16, 4, 0]
+    ];
+    assert_eq!(grid1, grid2);
+}
 
+#[test]
+fn test_sum_tiles_right() {
+    let mut grid1: [[u16; 4]; 4] = [
+        [2, 2, 8, 8],
+        [2, 2, 2, 8],
+        [16, 16, 2, 2],
+        [2, 16, 2, 2]
+    ];
+    game_logic::sum_tiles(&mut grid1, Direction::Right);
+    let grid2: [[u16; 4]; 4] = [
+        [0, 4, 0, 16],
+        [2, 0, 4, 8],
+        [0, 32, 0, 4],
+        [2, 16, 0, 4]
+    ];
+    assert_eq!(grid1, grid2);
+}
 
-// Unit tests for sum_tiles here
-// Unit tests for sum_tiles here
-// Unit tests for sum_tiles here
-
-
-
-
-
+//
+// Tests for gravity, 4 directions
+//
 
 #[test]
 fn test_gravity_down() {

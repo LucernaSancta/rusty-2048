@@ -89,9 +89,38 @@ pub fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
                 }
             }
         }
-        Direction::Up => todo!(),
-        Direction::Left => todo!(),
-        Direction::Right => todo!(),
+        Direction::Up => {
+            for row in 0..3 {
+                for element in 0..4 {
+                    if grid[row][element] == grid[row+1][element] {
+                        grid[row][element] *= 2;
+                        grid[row+1][element] = 0;
+                    }
+                }
+            }
+        }
+        Direction::Left => {
+            // Same thing as before but now we can use directly
+            // the row because we don't have to apply logic vertically
+            for row in grid {
+                for element in 0..3 {
+                    if row[element] == row[element+1] {
+                        row[element] *= 2;
+                        row[element+1] = 0;
+                    }
+                }
+            }
+        }
+        Direction::Right => {
+            for row in grid {
+                for element in (1..4).rev() {
+                    if row[element] == row[element-1] {
+                        row[element] *= 2;
+                        row[element-1] = 0;
+                    }
+                }
+            }
+        }
     }
 }
 

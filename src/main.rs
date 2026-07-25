@@ -17,7 +17,6 @@ fn main() {
 
     // Game loop
     loop {
-        
         // Print the grid
         for row in grid {
             println!("{:?}", row);
@@ -26,7 +25,7 @@ fn main() {
         // Get user input
         let mut buf = String::new();
         let _ = std::io::stdin().read_line(&mut buf);
-        
+
         // Convert user input in to directions
         match buf.strip_suffix("\n").unwrap() {
             "w" => direction = Direction::Up,
@@ -35,13 +34,13 @@ fn main() {
             "d" => direction = Direction::Right,
             _ => (),
         }
-        
+
         // If the user input is valid, step the game one tick
-        if ["w", "a", "s", "d"].contains(&buf.strip_suffix("\n").unwrap()){
+        if ["w", "a", "s", "d"].contains(&buf.strip_suffix("\n").unwrap()) {
             game_logic::gravity(&mut grid, &direction);
             game_logic::sum_tiles(&mut grid, &direction);
             game_logic::gravity(&mut grid, &direction);
-    
+
             game_logic::rand_new_tile(&mut grid);
         }
     }

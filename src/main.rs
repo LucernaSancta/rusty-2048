@@ -1,7 +1,9 @@
-mod game_logic;
-use game_logic::Direction;
+#[rustfmt::skip]
 #[cfg(test)]
 mod tests;
+
+mod game_logic;
+use game_logic::Direction;
 
 fn main() {
     let mut grid: [[u16; 4]; 4] = game_logic::create_grid();

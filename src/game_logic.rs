@@ -4,28 +4,32 @@ pub enum Direction {
     Up,
     Down,
     Left,
-    Right
+    Right,
 }
 
 pub fn create_grid() -> [[u16; 4]; 4] {
     // Create the 4x4 grid of u16 unsigned integers
 
+    #[rustfmt::skip]
     let grid: [[u16; 4]; 4] = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    return grid;
+
+    // Return grid
+    grid
 }
 
 pub fn rand_new() -> u16 {
     // Get a random number (either 90% 2 or  10% 4)
 
     let n: u8 = rand::random_range(0..10);
-    return match n {
+    // Return matched
+    match n {
         0 => 4,
-        _ => 2
+        _ => 2,
     }
 }
 
@@ -40,14 +44,15 @@ pub fn get_free(grid: &[[u16; 4]; 4]) -> u8 {
             }
         }
     }
-    return n;
+    // Return n
+    n
 }
 
 pub fn rand_new_tile(grid: &mut [[u16; 4]; 4]) {
     // Place a new value in a random empty tile,
     // does nothing if no tile is empty
 
-    let free: u8 = get_free(&grid);
+    let free: u8 = get_free(grid);
     if free == 0 {
         return;
     }
@@ -81,10 +86,10 @@ pub fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
             for row in (1..4).rev() {
                 // Here we take all 4 elements of the row, not only 3
                 for element in 0..4 {
-                    if grid[row][element] == grid[row-1][element] {
+                    if grid[row][element] == grid[row - 1][element] {
                         // Double the element below and delete the element above
                         grid[row][element] *= 2;
-                        grid[row-1][element] = 0;
+                        grid[row - 1][element] = 0;
                     }
                 }
             }
@@ -92,9 +97,9 @@ pub fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
         Direction::Up => {
             for row in 0..3 {
                 for element in 0..4 {
-                    if grid[row][element] == grid[row+1][element] {
+                    if grid[row][element] == grid[row + 1][element] {
                         grid[row][element] *= 2;
-                        grid[row+1][element] = 0;
+                        grid[row + 1][element] = 0;
                     }
                 }
             }
@@ -104,9 +109,9 @@ pub fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
             // the row because we don't have to apply logic vertically
             for row in grid {
                 for element in 0..3 {
-                    if row[element] == row[element+1] {
+                    if row[element] == row[element + 1] {
                         row[element] *= 2;
-                        row[element+1] = 0;
+                        row[element + 1] = 0;
                     }
                 }
             }
@@ -114,9 +119,9 @@ pub fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
         Direction::Right => {
             for row in grid {
                 for element in (1..4).rev() {
-                    if row[element] == row[element-1] {
+                    if row[element] == row[element - 1] {
                         row[element] *= 2;
-                        row[element-1] = 0;
+                        row[element - 1] = 0;
                     }
                 }
             }
@@ -125,12 +130,20 @@ pub fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
 }
 
 fn sort_left(_: &u16, b: &u16) -> Ordering {
-    if *b == 0 {Ordering::Less}
-    else {Ordering::Equal}}
+    if *b == 0 {
+        Ordering::Less
+    } else {
+        Ordering::Equal
+    }
+}
 
 fn sort_right(a: &u16, _: &u16) -> Ordering {
-    if *a == 0 {Ordering::Less}
-    else {Ordering::Equal}}
+    if *a == 0 {
+        Ordering::Less
+    } else {
+        Ordering::Equal
+    }
+}
 
 pub fn gravity(grid: &mut [[u16; 4]; 4], direction: Direction) {
     // Compresses all value of a row/comuln in one direction
@@ -141,7 +154,7 @@ pub fn gravity(grid: &mut [[u16; 4]; 4], direction: Direction) {
             // Create a temporary array and place the values
             // of a column, sort the array and put the values back
             for y in 0..4 {
-                let mut temp_array: [u16; 4] = [0,0,0,0];
+                let mut temp_array: [u16; 4] = [0, 0, 0, 0];
                 for x in 0..4 {
                     temp_array[x] = grid[x][y];
                 }
@@ -153,7 +166,7 @@ pub fn gravity(grid: &mut [[u16; 4]; 4], direction: Direction) {
         }
         Direction::Up => {
             for y in 0..4 {
-                let mut temp_array: [u16; 4] = [0,0,0,0];
+                let mut temp_array: [u16; 4] = [0, 0, 0, 0];
                 for x in 0..4 {
                     temp_array[x] = grid[x][y];
                 }

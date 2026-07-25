@@ -92,7 +92,7 @@ fn test_sum_tiles_down() {
         [16, 16, 2, 2],
         [2, 16, 2, 2]
     ];
-    game_logic::sum_tiles(&mut grid1, Direction::Down);
+    game_logic::sum_tiles(&mut grid1, &Direction::Down);
     let grid2: [[u16; 4]; 4] = [
         [0, 0, 8, 0],
         [4, 4, 2, 16],
@@ -110,7 +110,7 @@ fn test_sum_tiles_up() {
         [16, 16, 2, 2],
         [2, 16, 2, 2]
     ];
-    game_logic::sum_tiles(&mut grid1, Direction::Up);
+    game_logic::sum_tiles(&mut grid1, &Direction::Up);
     let grid2: [[u16; 4]; 4] = [
         [4, 4, 8, 16],
         [0, 0, 4, 0],
@@ -128,7 +128,7 @@ fn test_sum_tiles_left() {
         [16, 16, 2, 2],
         [2, 16, 2, 2]
     ];
-    game_logic::sum_tiles(&mut grid1, Direction::Left);
+    game_logic::sum_tiles(&mut grid1, &Direction::Left);
     let grid2: [[u16; 4]; 4] = [
         [4, 0, 16, 0],
         [4, 0, 2, 8],
@@ -146,7 +146,7 @@ fn test_sum_tiles_right() {
         [16, 16, 2, 2],
         [2, 16, 2, 2]
     ];
-    game_logic::sum_tiles(&mut grid1, Direction::Right);
+    game_logic::sum_tiles(&mut grid1, &Direction::Right);
     let grid2: [[u16; 4]; 4] = [
         [0, 4, 0, 16],
         [2, 0, 4, 8],
@@ -168,7 +168,7 @@ fn test_gravity_down() {
         [4, 0, 8, 2],
         [0, 4, 2, 0]
     ];
-    game_logic::gravity(&mut grid1, Direction::Down);
+    game_logic::gravity(&mut grid1, &Direction::Down);
     let grid2: [[u16; 4]; 4] = [
         [0, 0, 0, 0],
         [0, 0, 4, 0],
@@ -186,7 +186,7 @@ fn test_gravity_up() {
         [4, 0, 8, 2],
         [0, 4, 2, 0]
     ];
-    game_logic::gravity(&mut grid1, Direction::Up);
+    game_logic::gravity(&mut grid1, &Direction::Up);
     let grid2: [[u16; 4]; 4] = [
         [2, 2, 4, 4],
         [4, 4, 8, 2],
@@ -204,7 +204,7 @@ fn test_gravity_left() {
         [4, 0, 8, 2],
         [0, 4, 2, 0]
     ];
-    game_logic::gravity(&mut grid1, Direction::Left);
+    game_logic::gravity(&mut grid1, &Direction::Left);
     let grid2: [[u16; 4]; 4] = [
         [2, 4, 0, 0],
         [2, 4, 0, 0],
@@ -222,7 +222,7 @@ fn test_gravity_right() {
         [4, 0, 8, 2],
         [0, 4, 2, 0]
     ];
-    game_logic::gravity(&mut grid1, Direction::Right);
+    game_logic::gravity(&mut grid1, &Direction::Right);
     let grid2: [[u16; 4]; 4] = [
         [0, 0, 2, 4],
         [0, 0, 2, 4],

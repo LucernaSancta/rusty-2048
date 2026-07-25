@@ -1,3 +1,4 @@
+use std::fmt;
 use std::cmp::Ordering;
 
 pub enum Direction {
@@ -5,6 +6,17 @@ pub enum Direction {
     Down,
     Left,
     Right,
+}
+
+impl fmt::Display for Direction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+       match self {
+           Direction::Up => write!(f, "Direction::Up"),
+           Direction::Down => write!(f, "Direction::Down"),
+           Direction::Left => write!(f, "Direction::Left"),
+           Direction::Right => write!(f, "Direction::Right"),
+       }
+    }
 }
 
 pub fn create_grid() -> [[u16; 4]; 4] {
@@ -76,7 +88,7 @@ pub fn rand_new_tile(grid: &mut [[u16; 4]; 4]) {
     }
 }
 
-pub fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: Direction) {
+pub fn sum_tiles(grid: &mut [[u16; 4]; 4], direction: &Direction) {
     // Sum equal tiles so that there s only one tile with double the value
 
     match direction {
@@ -145,7 +157,7 @@ fn sort_right(a: &u16, _: &u16) -> Ordering {
     }
 }
 
-pub fn gravity(grid: &mut [[u16; 4]; 4], direction: Direction) {
+pub fn gravity(grid: &mut [[u16; 4]; 4], direction: &Direction) {
     // Compresses all value of a row/comuln in one direction
     // [2,0,4,0], Right => [0,0,2,4]
 

@@ -3,7 +3,7 @@
 mod tests;
 
 mod game_logic;
-use game_logic::Direction;
+use game_logic::{Direction, GameStatus};
 
 fn main() {
     let mut grid: [[u16; 4]; 4] = game_logic::create_grid();
@@ -20,6 +20,11 @@ fn main() {
         // Print the grid
         for row in grid {
             println!("{:?}", row);
+        }
+
+        match game_logic::check_end(&grid) {
+            GameStatus::Ongoing => (),
+            GameStatus::Ended => break,
         }
 
         // Get user input

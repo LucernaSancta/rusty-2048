@@ -19,6 +19,11 @@ impl fmt::Display for Direction {
     }
 }
 
+pub enum GameStatus {
+    Ongoing,
+    Ended,
+}
+
 pub fn create_grid() -> [[u16; 4]; 4] {
     // Create the 4x4 grid of u16 unsigned integers
 
@@ -202,4 +207,36 @@ pub fn gravity(grid: &mut [[u16; 4]; 4], direction: &Direction) {
             }
         }
     }
+}
+
+#[allow(clippy::needless_range_loop)]
+pub fn check_end(grid: &[[u16; 4]; 4]) -> GameStatus {
+    // Check if the game is in a stall position (end game)
+
+    // Empty spaces = game still playable
+    if get_free(grid) != 0 {
+        return GameStatus::Ongoing;
+    }
+
+    // Check for summable values (left, right)
+    for row in grid {
+        for i in 0..3 {
+            if row[i] == row[i + 1] {
+                return GameStatus::Ongoing;
+            }
+        }
+    }
+
+    // Check for summable values (up, down)
+    for row in 0..3 {
+        for element in 0..4 {
+            if grid[row][element] == grid[row + 1][element] {
+                return GameStatus::Ongoing;
+            }
+        }
+    }
+
+    // If all the revious checks fail than th game is in a
+    // stall position -> game over
+    GameStatus::Ended
 }

@@ -238,13 +238,13 @@ fn test_gravity_right() {
 
 #[test]
 fn test_check_end_i1() {
-    let mut grid: [[u16; 4]; 4] = [
+    let grid: [[u16; 4]; 4] = [
         [2, 0, 4, 0],
         [0, 2, 0, 4],
         [4, 0, 8, 2],
         [0, 4, 2, 0]
     ];
-    let result: GameStatus = game_logic::check_end(&mut grid);
+    let result: GameStatus = game_logic::check_end(&grid);
 
     let expected = GameStatus::Ongoing;
     
@@ -253,13 +253,13 @@ fn test_check_end_i1() {
 
 #[test]
 fn test_check_end_i2() {
-    let mut grid: [[u16; 4]; 4] = [
+    let grid: [[u16; 4]; 4] = [
         [2, 2, 4, 4],
         [4, 4, 2, 2],
         [2, 2, 4, 4],
         [4, 4, 2, 2]
     ];
-    let result: GameStatus = game_logic::check_end(&mut grid);
+    let result: GameStatus = game_logic::check_end(&grid);
 
     let expected = GameStatus::Ongoing;
     
@@ -268,13 +268,13 @@ fn test_check_end_i2() {
 
 #[test]
 fn test_check_end_i3() {
-    let mut grid: [[u16; 4]; 4] = [
+    let grid: [[u16; 4]; 4] = [
         [2, 4, 2, 4],
         [2, 4, 2, 4],
         [4, 2, 4, 2],
         [4, 2, 4, 2]
     ];
-    let result: GameStatus = game_logic::check_end(&mut grid);
+    let result: GameStatus = game_logic::check_end(&grid);
 
     let expected = GameStatus::Ongoing;
     
@@ -283,13 +283,13 @@ fn test_check_end_i3() {
 
 #[test]
 fn test_check_end_i4() {
-    let mut grid: [[u16; 4]; 4] = [
+    let grid: [[u16; 4]; 4] = [
         [2, 4, 2, 4],
         [4, 2, 4, 2],
         [2, 4, 2, 4],
         [4, 2, 4, 2]
     ];
-    let result: GameStatus = game_logic::check_end(&mut grid);
+    let result: GameStatus = game_logic::check_end(&grid);
 
     let expected = GameStatus::Ended;
     

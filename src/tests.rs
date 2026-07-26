@@ -1,5 +1,5 @@
 use crate::game_logic;
-use crate::game_logic::Direction;
+use crate::game_logic::{Direction, GameStatus};
 
 //
 // Test for create_grid
@@ -230,4 +230,68 @@ fn test_gravity_right() {
         [0, 0, 4, 2]
     ];
     assert_eq!(grid1, grid2);
+}
+
+//
+// Tests for check_end, 4 variations
+//
+
+#[test]
+fn test_check_end_i1() {
+    let mut grid: [[u16; 4]; 4] = [
+        [2, 0, 4, 0],
+        [0, 2, 0, 4],
+        [4, 0, 8, 2],
+        [0, 4, 2, 0]
+    ];
+    let result: GameStatus = game_logic::check_end(&mut grid);
+
+    let expected = GameStatus::Ongoing;
+    
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_check_end_i2() {
+    let mut grid: [[u16; 4]; 4] = [
+        [2, 2, 4, 4],
+        [4, 4, 2, 2],
+        [2, 2, 4, 4],
+        [4, 4, 2, 2]
+    ];
+    let result: GameStatus = game_logic::check_end(&mut grid);
+
+    let expected = GameStatus::Ongoing;
+    
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_check_end_i3() {
+    let mut grid: [[u16; 4]; 4] = [
+        [2, 4, 2, 4],
+        [2, 4, 2, 4],
+        [4, 2, 4, 2],
+        [4, 2, 4, 2]
+    ];
+    let result: GameStatus = game_logic::check_end(&mut grid);
+
+    let expected = GameStatus::Ongoing;
+    
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_check_end_i4() {
+    let mut grid: [[u16; 4]; 4] = [
+        [2, 4, 2, 4],
+        [4, 2, 4, 2],
+        [2, 4, 2, 4],
+        [4, 2, 4, 2]
+    ];
+    let result: GameStatus = game_logic::check_end(&mut grid);
+
+    let expected = GameStatus::Ended;
+    
+    assert_eq!(result, expected);
 }

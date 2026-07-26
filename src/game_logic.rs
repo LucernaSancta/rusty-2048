@@ -19,6 +19,7 @@ impl fmt::Display for Direction {
     }
 }
 
+#[derive(PartialEq, Debug)]
 pub enum GameStatus {
     Ongoing,
     Ended,

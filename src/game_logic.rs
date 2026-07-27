@@ -25,21 +25,9 @@ pub enum GameStatus {
     Ended,
 }
 
+#[derive(Default)]
 pub struct Game {
     pub grid: [[u16; 4]; 4],
-}
-
-impl Default for Game {
-    fn default() -> Game {
-        Game {
-            grid: [
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0]
-            ]
-        }
-    }
 }
 
 impl fmt::Display for Game {
@@ -63,7 +51,6 @@ impl fmt::Display for Game {
 }
 
 impl Game {
-
     pub fn get_free(&self) -> u8 {
         // Get the number of 0s in the Game
         let mut n: u8 = 0;
@@ -111,7 +98,7 @@ impl Game {
         // Sum equal tiles so that there s only one tile with double the value
 
         let grid = &mut self.grid;
-    
+
         match direction {
             Direction::Down => {
                 // 1..4 (1,2,3) because we only need 3 additions:
@@ -161,12 +148,12 @@ impl Game {
             }
         }
     }
-    
+
     #[allow(clippy::needless_range_loop)]
     pub fn gravity(&mut self, direction: &Direction) {
         // Compresses all value of a row/comuln in one direction
         // [2,0,4,0], Right => [0,0,2,4]
-    
+
         let grid = &mut self.grid;
 
         match direction {
@@ -209,16 +196,16 @@ impl Game {
             }
         }
     }
-    
+
     #[allow(clippy::needless_range_loop)]
     pub fn check_end(&self) -> GameStatus {
         // Check if the game is in a stall position (end game)
-    
+
         // Empty spaces = game still playable
         if self.get_free() != 0 {
             return GameStatus::Running;
         }
-    
+
         // Check for summable values (left, right)
         for row in self.grid {
             for i in 0..3 {
@@ -227,7 +214,7 @@ impl Game {
                 }
             }
         }
-    
+
         // Check for summable values (up, down)
         for row in 0..3 {
             for element in 0..4 {
@@ -236,12 +223,11 @@ impl Game {
                 }
             }
         }
-    
+
         // If all the revious checks fail than th game is in a
         // stall position -> game over
         GameStatus::Ended
     }
-
 }
 
 fn rand_new() -> u16 {

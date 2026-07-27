@@ -1,9 +1,8 @@
-#[rustfmt::skip]
 #[cfg(test)]
 mod tests;
 
 mod game_logic;
-use game_logic::{Game, Direction, GameStatus};
+use game_logic::{Direction, Game, GameStatus};
 
 fn main() {
     simple_game_cli();

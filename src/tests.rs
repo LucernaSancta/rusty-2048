@@ -1,295 +1,316 @@
-use crate::game_logic;
-use crate::game_logic::{Direction, GameStatus};
+use crate::game_logic::{Game, Direction, GameStatus};
 
 //
-// Test for create_grid
+// Test for Game::default
 //
 
 #[test]
-fn test_create_grid() {
-    let grid1 = game_logic::create_grid();
-    let grid2: [[u16; 4]; 4] = [
+fn game_default() {
+    let game = Game::default();
+    let expected: [[u16; 4]; 4] = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    assert_eq!(grid1, grid2);
+    assert_eq!(game.grid, expected);
 }
 
 //
-// Test for rand_new, 100 iterations
+// Tests for Game.fmt, 2 variations
 //
 
 #[test]
-fn test_rand_new() {
-    for _ in 0..100 {
-        let n = game_logic::rand_new();
-        assert!((n == 2) || (n == 4));
-    }
-}
-
-//
-// Tests for get_free, 3 iterations (16,12,10)
-//
-
-#[test]
-fn test_get_free16() {
-    let grid = game_logic::create_grid();
-    let n = game_logic::get_free(&grid);
-    assert_eq!(n, 16);
+fn game_fmt_v1() {
+    let result = format!("{}", Game::default());
+    let expected = "╔════════════╗
+║            ║
+║            ║
+║            ║
+║            ║
+╚════════════╝".to_owned();
+    assert_eq!(result, expected);
 }
 
 #[test]
-fn test_get_free12() {
-    let mut grid = game_logic::create_grid();
-    grid[0] = [2,4,4,2];
-    let n = game_logic::get_free(&grid);
-    assert_eq!(n, 12);
-}
-
-#[test]
-fn test_get_free10() {
-    let mut grid = game_logic::create_grid();
-    grid[0] = [2,4,4,2];
-    grid[1][2] = 16;
-    grid[3][1] = 32768;
-    let n = game_logic::get_free(&grid);
-    assert_eq!(n, 10);
+fn game_fmt_v2() {
+    let game = Game{ grid: [
+        [0, 8, 2, 0],
+        [4, 16, 0, 0],
+        [2, 4, 0, 0],
+        [8, 2, 16, 2]
+    ]};
+    let result = format!("{}", game);
+    let expected = "╔════════════╗
+║     8  2   ║
+║  4 16      ║
+║  2  4      ║
+║  8  2 16  2║
+╚════════════╝".to_owned();
+    assert_eq!(result, expected);
 }
 
 //
-// Test for rand_new_tile, 8 iterations
+// Tests for Game.get_free, 3 variations (16,12,10)
 //
 
 #[test]
-fn test_rand_new_tile8() {
-    let mut grid = game_logic::create_grid();
+fn game_get_free_v1() {
+    let game = Game::default();
+    let result = game.get_free();
+    assert_eq!(result, 16);
+}
+
+#[test]
+fn game_get_free_v2() {
+    let mut game = Game::default();
+    game.grid[0] = [2,4,4,2];
+    let result = game.get_free();
+    assert_eq!(result, 12);
+}
+
+#[test]
+fn game_get_free_v3() {
+    let mut game = Game::default();
+    game.grid[0] = [2,4,4,2];
+    game.grid[1][2] = 16;
+    game.grid[3][1] = 32768;
+    let result = game.get_free();
+    assert_eq!(result, 10);
+}
+
+//
+// Test for Game.rand_new_tile, 8 iterations
+//
+
+#[test]
+fn game_rand_new_tile8() {
+    let mut game = Game::default();
     for _ in 0..8 {
-        game_logic::rand_new_tile(&mut grid);
+        game.rand_new_tile();
     }
-    let mut counter: u8 = 0;
-    for row in grid {
+    let mut result: u8 = 0;
+    for row in game.grid {
         for element in row {
             match element {
-                2 | 4 => counter += 1,
+                2 | 4 => result += 1,
                 _ => (),
             }
         }
     }
-    assert_eq!(counter, 8);
+    assert_eq!(result, 8);
 }
 
 //
-// Tests for sum_tiles, 4 directions
+// Tests for Game.sum_tiles, 4 directions
 //
 
 #[test]
-fn test_sum_tiles_down() {
-    let mut grid1: [[u16; 4]; 4] = [
+fn game_sum_tiles_down() {
+    let mut game = Game{ grid: [
         [2, 2, 8, 8],
         [2, 2, 2, 8],
         [16, 16, 2, 2],
         [2, 16, 2, 2]
-    ];
-    game_logic::sum_tiles(&mut grid1, &Direction::Down);
-    let grid2: [[u16; 4]; 4] = [
+    ]};
+    game.sum_tiles(&Direction::Down);
+    let expected: [[u16; 4]; 4] = [
         [0, 0, 8, 0],
         [4, 4, 2, 16],
         [16, 0, 0, 0],
         [2, 32, 4, 4]
     ];
-    assert_eq!(grid1, grid2);
+    assert_eq!(game.grid, expected);
 }
 
 #[test]
-fn test_sum_tiles_up() {
-    let mut grid1: [[u16; 4]; 4] = [
+fn game_sum_tiles_up() {
+    let mut game = Game{ grid: [
         [2, 2, 8, 8],
         [2, 2, 2, 8],
         [16, 16, 2, 2],
         [2, 16, 2, 2]
-    ];
-    game_logic::sum_tiles(&mut grid1, &Direction::Up);
-    let grid2: [[u16; 4]; 4] = [
+    ]};
+    game.sum_tiles(&Direction::Up);
+    let expected: [[u16; 4]; 4] = [
         [4, 4, 8, 16],
         [0, 0, 4, 0],
         [16, 32, 0, 4],
         [2, 0, 2, 0]
     ];
-    assert_eq!(grid1, grid2);
+    assert_eq!(game.grid, expected);
 }
 
 #[test]
-fn test_sum_tiles_left() {
-    let mut grid1: [[u16; 4]; 4] = [
+fn game_sum_tiles_left() {
+    let mut game = Game{ grid: [
         [2, 2, 8, 8],
         [2, 2, 2, 8],
         [16, 16, 2, 2],
         [2, 16, 2, 2]
-    ];
-    game_logic::sum_tiles(&mut grid1, &Direction::Left);
-    let grid2: [[u16; 4]; 4] = [
+    ]};
+    game.sum_tiles(&Direction::Left);
+    let expected: [[u16; 4]; 4] = [
         [4, 0, 16, 0],
         [4, 0, 2, 8],
         [32, 0, 4, 0],
         [2, 16, 4, 0]
     ];
-    assert_eq!(grid1, grid2);
+    assert_eq!(game.grid, expected);
 }
 
 #[test]
-fn test_sum_tiles_right() {
-    let mut grid1: [[u16; 4]; 4] = [
+fn game_sum_tiles_right() {
+    let mut game = Game{ grid: [
         [2, 2, 8, 8],
         [2, 2, 2, 8],
         [16, 16, 2, 2],
         [2, 16, 2, 2]
-    ];
-    game_logic::sum_tiles(&mut grid1, &Direction::Right);
-    let grid2: [[u16; 4]; 4] = [
+    ]};
+    game.sum_tiles(&Direction::Right);
+    let expected: [[u16; 4]; 4] = [
         [0, 4, 0, 16],
         [2, 0, 4, 8],
         [0, 32, 0, 4],
         [2, 16, 0, 4]
     ];
-    assert_eq!(grid1, grid2);
+    assert_eq!(game.grid, expected);
 }
 
 //
-// Tests for gravity, 4 directions
+// Tests for Game.gravity, 4 directions
 //
 
 #[test]
-fn test_gravity_down() {
-    let mut grid1: [[u16; 4]; 4] = [
+fn game_gravity_down() {
+    let mut game = Game{ grid: [
         [2, 0, 4, 0],
         [0, 2, 0, 4],
         [4, 0, 8, 2],
         [0, 4, 2, 0]
-    ];
-    game_logic::gravity(&mut grid1, &Direction::Down);
-    let grid2: [[u16; 4]; 4] = [
+    ]};
+    game.gravity(&Direction::Down);
+    let expected: [[u16; 4]; 4] = [
         [0, 0, 0, 0],
         [0, 0, 4, 0],
         [2, 2, 8, 4],
         [4, 4, 2, 2]
     ];
-    assert_eq!(grid1, grid2);
+    assert_eq!(game.grid, expected);
 }
 
 #[test]
-fn test_gravity_up() {
-    let mut grid1: [[u16; 4]; 4] = [
+fn game_gravity_up() {
+    let mut game = Game{ grid: [
         [2, 0, 4, 0],
         [0, 2, 0, 4],
         [4, 0, 8, 2],
         [0, 4, 2, 0]
-    ];
-    game_logic::gravity(&mut grid1, &Direction::Up);
-    let grid2: [[u16; 4]; 4] = [
+    ]};
+    game.gravity(&Direction::Up);
+    let expected: [[u16; 4]; 4] = [
         [2, 2, 4, 4],
         [4, 4, 8, 2],
         [0, 0, 2, 0],
         [0, 0, 0, 0]
     ];
-    assert_eq!(grid1, grid2);
+    assert_eq!(game.grid, expected);
 }
 
 #[test]
-fn test_gravity_left() {
-    let mut grid1: [[u16; 4]; 4] = [
+fn game_gravity_left() {
+    let mut game = Game{ grid: [
         [2, 0, 4, 0],
         [0, 2, 0, 4],
         [4, 0, 8, 2],
         [0, 4, 2, 0]
-    ];
-    game_logic::gravity(&mut grid1, &Direction::Left);
-    let grid2: [[u16; 4]; 4] = [
+    ]};
+    game.gravity(&Direction::Left);
+    let expected: [[u16; 4]; 4] = [
         [2, 4, 0, 0],
         [2, 4, 0, 0],
         [4, 8, 2, 0],
         [4, 2, 0, 0]
     ];
-    assert_eq!(grid1, grid2);
+    assert_eq!(game.grid, expected);
 }
 
 #[test]
-fn test_gravity_right() {
-    let mut grid1: [[u16; 4]; 4] = [
+fn game_gravity_right() {
+    let mut game = Game{ grid: [
         [2, 0, 4, 0],
         [0, 2, 0, 4],
         [4, 0, 8, 2],
         [0, 4, 2, 0]
-    ];
-    game_logic::gravity(&mut grid1, &Direction::Right);
-    let grid2: [[u16; 4]; 4] = [
+    ]};
+    game.gravity(&Direction::Right);
+    let expected: [[u16; 4]; 4] = [
         [0, 0, 2, 4],
         [0, 0, 2, 4],
         [0, 4, 8, 2],
         [0, 0, 4, 2]
     ];
-    assert_eq!(grid1, grid2);
+    assert_eq!(game.grid, expected);
 }
 
 //
-// Tests for check_end, 4 variations
+// Tests for Game.check_end, 4 variations
 //
 
 #[test]
-fn test_check_end_i1() {
-    let grid: [[u16; 4]; 4] = [
+fn game_check_end_v1() {
+    let game = Game{ grid: [
         [2, 0, 4, 0],
         [0, 2, 0, 4],
         [4, 0, 8, 2],
         [0, 4, 2, 0]
-    ];
-    let result: GameStatus = game_logic::check_end(&grid);
+    ]};
+    let result: GameStatus = game.check_end();
 
-    let expected = GameStatus::Ongoing;
+    let expected = GameStatus::Running;
     
     assert_eq!(result, expected);
 }
 
 #[test]
-fn test_check_end_i2() {
-    let grid: [[u16; 4]; 4] = [
+fn game_check_end_v2() {
+    let game = Game{ grid: [
         [2, 2, 4, 4],
         [4, 4, 2, 2],
         [2, 2, 4, 4],
         [4, 4, 2, 2]
-    ];
-    let result: GameStatus = game_logic::check_end(&grid);
+    ]};
+    let result: GameStatus = game.check_end();
 
-    let expected = GameStatus::Ongoing;
+    let expected = GameStatus::Running;
     
     assert_eq!(result, expected);
 }
 
 #[test]
-fn test_check_end_i3() {
-    let grid: [[u16; 4]; 4] = [
+fn game_check_end_v3() {
+    let game = Game{ grid: [
         [2, 4, 2, 4],
         [2, 4, 2, 4],
         [4, 2, 4, 2],
         [4, 2, 4, 2]
-    ];
-    let result: GameStatus = game_logic::check_end(&grid);
+    ]};
+    let result: GameStatus = game.check_end();
 
-    let expected = GameStatus::Ongoing;
+    let expected = GameStatus::Running;
     
     assert_eq!(result, expected);
 }
 
 #[test]
-fn test_check_end_i4() {
-    let grid: [[u16; 4]; 4] = [
+fn game_check_end_v4() {
+    let game = Game{ grid: [
         [2, 4, 2, 4],
         [4, 2, 4, 2],
         [2, 4, 2, 4],
         [4, 2, 4, 2]
-    ];
-    let result: GameStatus = game_logic::check_end(&grid);
+    ]};
+    let result: GameStatus = game.check_end();
 
     let expected = GameStatus::Ended;
     

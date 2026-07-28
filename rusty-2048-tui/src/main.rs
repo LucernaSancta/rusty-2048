@@ -1,6 +1,6 @@
-use rusty_2048;
+use rusty_2048::Game;
 
 fn main() {
-    let game = rusty_2048::Game::default();
+    let game = Game::default();
     println!("{}", game);
 }

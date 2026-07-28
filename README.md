@@ -7,3 +7,10 @@ The name *"rusty 2048"* is a typing error, the project should have been named *"
 ## TODO list
 
  - implement a TUI with [Ratatui](https://ratatui.rs/)
+
+## Inspirations
+
+This repository takes inspiration from two awesome projects:
+
+ - [crossword](https://github.com/MatrixFrog/crossword) made by *MatrixFrog*
+ - [PicoLimbo](https://github.com/Quozul/PicoLimbo) made by *Quozul*

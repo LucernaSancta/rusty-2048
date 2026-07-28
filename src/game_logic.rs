@@ -8,17 +8,6 @@ pub enum Direction {
     Right,
 }
 
-impl fmt::Display for Direction {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Direction::Up => write!(f, "Direction::Up"),
-            Direction::Down => write!(f, "Direction::Down"),
-            Direction::Left => write!(f, "Direction::Left"),
-            Direction::Right => write!(f, "Direction::Right"),
-        }
-    }
-}
-
 #[derive(PartialEq, Debug)]
 pub enum GameStatus {
     Running,

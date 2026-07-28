@@ -75,3 +75,10 @@ version = "0.1.0"
 dependencies = [
  "rand",
 ]
+
+[[package]]
+name = "rusty-2048-tui"
+version = "0.1.0"
+dependencies = [
+ "rusty-2048",
+]

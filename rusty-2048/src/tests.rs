@@ -1,7 +1,7 @@
 // Whenever you se some empty comments where there is a grid,
 // those comments keep the grid intact when cargo fmt is run
 
-use crate::game_logic::{Direction, Game, GameStatus};
+use rusty_2048::{Direction, Game, GameStatus};
 
 //
 // Test for Game::default

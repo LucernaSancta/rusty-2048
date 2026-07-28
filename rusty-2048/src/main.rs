@@ -1,8 +1,7 @@
 #[cfg(test)]
 mod tests;
 
-mod game_logic;
-use game_logic::{Direction, Game, GameStatus};
+use rusty_2048::{Direction, Game, GameStatus};
 
 fn main() {
     simple_game_cli();

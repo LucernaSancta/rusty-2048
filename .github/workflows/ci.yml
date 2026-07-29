@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "master" ]
     paths:
-      - 'rusty-2048/**'
-      - 'rusty-2048-tui/**'
+      - 'rusty2048/**'
+      - 'rusty2048tui/**'
       - 'Cargo.lock'
       - 'Cargo.toml'
   pull_request:

@@ -1,7 +1,7 @@
 [package]
-name = "rusty-2048"
+name = "rusty2048tui"
 license = "MIT license"
-description = "Library simulating the basic mechanics of the 2048 game"
+description = "Interactive 2048 game using the Ratatui library"
 readme = "README.md"
 version.workspace = true
 edition.workspace = true
@@ -9,4 +9,4 @@ homepage.workspace = true
 repository.workspace = true
 
 [dependencies]
-rand = "0.10.2"
+rusty2048 = { path = "../rusty2048", version = "0.1.0" }

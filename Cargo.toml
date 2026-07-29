@@ -1,9 +1,9 @@
 [workspace]
 resolver = "2"
-members = ["rusty-2048-tui", "rusty-2048"]
+members = ["rusty2048tui", "rusty2048"]
 
 [workspace.package]
 version = "0.1.0"
-homepage = "https://github.com/LucernaSancta/rusty-2048"
-repository = "https://github.com/LucernaSancta/rusty-2048"
+homepage = "https://github.com/LucernaSancta/rusty2048"
+repository = "https://github.com/LucernaSancta/rusty2048"
 edition = "2024"
